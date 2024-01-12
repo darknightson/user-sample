@@ -55,7 +55,8 @@ class UserControllerTest {
         mockMvc.perform(get("/api/v1/users/test1@kakao.com"))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(jsonPath("$.email").value("test1@kakao.com"));
+
+                .andExpect(jsonPath("$.data.email").value("test1@kakao.com"));
     }
 
     @WithMockUser(username = "test", roles = {"USER"})

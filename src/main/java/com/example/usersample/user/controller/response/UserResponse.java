@@ -3,6 +3,7 @@ package com.example.usersample.user.controller.response;
 import com.example.usersample.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.validation.BindingResult;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,4 +34,6 @@ public class UserResponse {
                 .map(UserResponse::from)
                 .collect(toList());
     }
+
+
 }
