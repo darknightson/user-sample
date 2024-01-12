@@ -44,33 +44,35 @@ class UserControllerTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+
     @WithMockUser(username = "test", roles = {"USER"})
     @Test
-    void 유저의_주소와_닉네임을_수정할_수_있다() throws Exception {
+    void 유저_이메일로_조회를_한다() throws Exception {
 
         // given (준비)
-        UserUpdate userUpdate = UserUpdate.builder()
-                .address("Seoul")
-                .nickname("updateNickName")
-                .build();
-
         // when (실행)
-        mockMvc.perform(put("/api/v1/users/1")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(userUpdate))
-                        .with(csrf())
-                )
+        // then (단언 assert)
+        mockMvc.perform(get("/api/v1/users/test1@kakao.com"))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(authenticated().withUsername("test"));
-
-        User result = userRepository.findById(1l).get();
-
-        // then (단언 assert)
-        assertThat(result.getAddress()).isEqualTo(userUpdate.getAddress());
-
+                .andExpect(jsonPath("$.email").value("test1@kakao.com"));
     }
 
+    @WithMockUser(username = "test", roles = {"USER"})
+    @Test
+    void 전체_유저를_조회할_수_있다() throws Exception {
+
+        // given (준비)
+        // when (실행)
+        // then (단언 assert)
+        mockMvc.perform(get("/api/v1/users"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$", hasSize(3))) // 배열 크기가 3인지 검증
+                .andExpect(jsonPath("$[0].nickname").value("testnick1"))
+                .andExpect(jsonPath("$[0].email").value("test1@kakao.com"));
+    }
 
     @WithMockUser(username = "test", roles = {"USER"})
     @Test
@@ -102,30 +104,28 @@ class UserControllerTest {
 
     @WithMockUser(username = "test", roles = {"USER"})
     @Test
-    void 유저_이메일로_조회를_한다() throws Exception {
+    void 유저의_주소와_닉네임을_수정할_수_있다() throws Exception {
 
         // given (준비)
+        UserUpdate userUpdate = UserUpdate.builder()
+                .address("Seoul")
+                .nickname("updateNickName")
+                .build();
+
         // when (실행)
-        // then (단언 assert)
-        mockMvc.perform(get("/api/v1/users/test1@kakao.com"))
+        mockMvc.perform(put("/api/v1/users/1")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(userUpdate))
+                        .with(csrf())
+                )
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(jsonPath("$.email").value("test1@kakao.com"));
-    }
+                .andExpect(authenticated().withUsername("test"));
 
-    @WithMockUser(username = "test", roles = {"USER"})
-    @Test
-    void 전체_유저를_조회할_수_있다() throws Exception {
+        User result = userRepository.findById(1l).get();
 
-        // given (준비)
-        // when (실행)
         // then (단언 assert)
-        mockMvc.perform(get("/api/v1/users"))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$", hasSize(3))) // 배열 크기가 3인지 검증
-                .andExpect(jsonPath("$[0].nickname").value("testnick1"))
-                .andExpect(jsonPath("$[0].email").value("test1@kakao.com"));
+        assertThat(result.getAddress()).isEqualTo(userUpdate.getAddress());
+
     }
 }
