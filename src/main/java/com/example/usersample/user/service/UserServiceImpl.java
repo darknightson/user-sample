@@ -8,6 +8,7 @@ import com.example.usersample.user.domain.UserCreate;
 import com.example.usersample.user.domain.UserUpdate;
 import com.example.usersample.user.service.port.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User getById(long id) {
@@ -35,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(UserCreate userCreate) {
-        User user = User.create(userCreate);
+        User user = User.create(userCreate, passwordEncoder);
         return userRepository.save(user);
     }
 

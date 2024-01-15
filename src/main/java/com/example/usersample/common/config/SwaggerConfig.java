@@ -3,8 +3,11 @@ package com.example.usersample.common.config;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import static io.swagger.v3.oas.models.security.SecurityScheme.*;
 
 @Configuration
 public class SwaggerConfig {
@@ -12,7 +15,13 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
-                .components(new Components())
+                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+                .components(new Components().addSecuritySchemes("bearerAuth", new io.swagger.v3.oas.models.security.SecurityScheme()
+                        .type(Type.HTTP)
+                        .scheme("bearer")
+                        .bearerFormat("JWT")
+                        .in(In.HEADER)
+                        .name("Authorization")))
                 .info(apiInfo());
     }
 

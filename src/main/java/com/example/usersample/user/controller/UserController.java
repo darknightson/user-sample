@@ -7,6 +7,8 @@ import com.example.usersample.user.domain.UserCreate;
 import com.example.usersample.user.domain.UserUpdate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +28,9 @@ public class UserController {
 
     private final UserService userService;
 
-    @Operation(summary = "email 을 통한 유저 조회", description = "email 을 통해 유저를 조회합니다.")
-    @Parameter(name = "email", description = "유저 이메일", required = true)
+
+    @Operation(summary = "email 을 통한 유저 조회", description = "email 을 통해 유저를 조회합니다.",
+            security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/{email}")
     public ResponseEntity<ApiResponse> getUser(@PathVariable String email) {
         UserResponse userResponse = UserResponse.from(userService.getUser(email));

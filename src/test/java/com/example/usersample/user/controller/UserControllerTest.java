@@ -114,7 +114,7 @@ class UserControllerTest {
                 .build();
 
         // when (실행)
-        mockMvc.perform(put("/api/v1/users/1")
+        mockMvc.perform(put("/api/v1/users/2")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(userUpdate))
                         .with(csrf())

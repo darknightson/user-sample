@@ -9,7 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +30,9 @@ class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Spy
+    private PasswordEncoder passwordEncoder;
 
     User init() {
         return User.builder()
@@ -109,6 +114,7 @@ class UserServiceTest {
                 .password("1234")
                 .address("서울시 강남구")
                 .nickname("kakao")
+                .roles("ROLE_USER")
                 .build();
 
         User expectedUser = init();

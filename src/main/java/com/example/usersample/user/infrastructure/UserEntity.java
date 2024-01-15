@@ -8,6 +8,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Table(name = "users")
@@ -27,13 +30,16 @@ public class UserEntity extends BaseEntity {
 
     private String nickname;
 
+    private String roles;
+
     @Builder
-    private UserEntity(Long id, String email, String password, String address, String nickname) {
+    private UserEntity(Long id, String email, String password, String address, String nickname, String roles) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.address = address;
         this.nickname = nickname;
+        this.roles = roles;
     }
 
     public static UserEntity from(User user) {
@@ -43,6 +49,7 @@ public class UserEntity extends BaseEntity {
             .password(user.getPassword())
             .address(user.getAddress())
             .nickname(user.getNickname())
+            .roles(user.getRoles())
             .build();
     }
 
@@ -53,6 +60,7 @@ public class UserEntity extends BaseEntity {
             .password(password)
             .address(address)
             .nickname(nickname)
+            .roles(roles)
             .build();
     }
 }

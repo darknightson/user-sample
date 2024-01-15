@@ -1,6 +1,10 @@
 package com.example.usersample.user.domain;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Spy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,16 +23,16 @@ class UserTest {
                  .nickname("test")
                  .address("서울시 강남구")
                  .password("1234")
+                 .roles("ROLE_USER")
                  .build();
 
         // when (실행)
-        User user = User.create(userCreate);
+        User user = User.create(userCreate, new BCryptPasswordEncoder());
 
         // then (단언 assert)
         assertThat(user.getEmail()).isEqualTo(userCreate.getEmail());
         assertThat(user.getNickname()).isEqualTo(userCreate.getNickname());
         assertThat(user.getAddress()).isEqualTo(userCreate.getAddress());
-        assertThat(user.getPassword()).isEqualTo(userCreate.getPassword());
     }
 
     @Test
