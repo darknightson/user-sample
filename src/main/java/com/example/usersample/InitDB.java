@@ -15,7 +15,7 @@ public class InitDB {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @PostConstruct
+    //@PostConstruct
     public void init() {
         userRepository.save(User.builder()
                 .email("test@kakao.com")
